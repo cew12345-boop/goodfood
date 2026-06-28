@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>臺灣美食詩選：跨領域全方位學習互動平台</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - 載入繁體中文與宋體美化字體 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        .serif-font {
+            font-family: 'Noto Serif TC', serif;
+        }
+        .scroll-mt-20 {
+            scroll-margin-top: 5rem;
+        }
+        /* 隱藏滾動條但保持功能 */
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 4px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: #1e1b4b;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="bg-[#FCFAF2] text-slate-800 font-sans antialiased selection:bg-amber-100 selection:text-amber-900 pb-12">
+
+    <!-- 浮動式 Toast 通知 -->
+    <div id="toast" class="fixed top-4 right-4 z-50 flex items-center px-5 py-3 rounded-xl shadow-xl transition-all duration-300 transform translate-y-12 opacity-0 pointer-events-none max-w-md">
+        <span id="toast-icon" class="text-xl mr-3">✓</span>
+        <span id="toast-message" class="font-medium text-sm"></span>
+    </div>
+
+    <!-- 頂部高雅 Header 暨學習進度條 -->
+    <header class="sticky top-0 bg-[#FCFAF2]/95 backdrop-blur-md border-b border-amber-100 shadow-sm z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <span class="text-3xl">🍲</span>
+                    <div>
+                        <h1 class="text-lg font-bold text-amber-950 serif-font leading-tight">臺灣美食詩選學習互動網</h1>
+                        <p class="text-xs text-amber-800 font-medium">語文寫作、在地歷史與資訊思維跨領域平台</p>
+                    </div>
+                </div>
+
+                <!-- 桌面端導航列 -->
+                <nav class="hidden lg:flex space-x-1">
+                    <button onclick="scrollToSection('guide')" id="nav-guide" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-colors bg-amber-800 text-white">精華導讀</button>
+                    <button onclick="scrollToSection('grammar')" id="nav-grammar" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-colors text-amber-900 hover:bg-amber-50">句型特訓</button>
+                    <button onclick="scrollToSection('factory')" id="nav-factory" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-colors text-amber-900 hover:bg-amber-50">肉圓演算法</button>
+                    <button onclick="scrollToSection('generator')" id="nav-generator" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-colors text-amber-900 hover:bg-amber-50">寫作藍圖</button>
+                    <button onclick="scrollToSection('quiz')" id="nav-quiz" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-colors text-amber-900 hover:bg-amber-50">綜合評量</button>
+                    <button onclick="scrollToSection('certificate')" id="nav-certificate" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-colors text-amber-900 hover:bg-amber-50">榮譽證書</button>
+                </nav>
+
+                <div class="flex items-center space-x-2">
+                    <!-- -->
+                    <button onclick="downloadCurrentHTML()" class="bg-amber-800 hover:bg-amber-955 text-white text-xs font-bold py-2 px-3 rounded-lg transition flex items-center space-x-1.5 shadow-sm mr-2" title="下載此互動平台網頁 HTML，供離線或本機教學使用">
+                        <span>💾 下載網頁</span>
+                    </button>
+                    <div class="text-right hidden sm:block">
+                        <span class="text-xs text-slate-500 block">挑戰得分</span>
+                        <span id="score-badge" class="text-sm font-bold text-amber-800">未提交</span>
+                    </div>
+                    <div id="trophy-badge" class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-800 font-bold border border-amber-200 animate-pulse">
+                        ★
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 進度裝飾線 -->
+        <div class="h-1 w-full bg-slate-100">
+            <div id="progress-bar" class="h-full bg-amber-700 transition-all duration-500" style="width: 15%;"></div>
+        </div>
+    </header>
+
+    <!-- 主體區 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-16">
+        
+        <!-- 頂部 Hero 橫幅 -->
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#F3EFE0] to-[#E2D8B9] p-8 md:p-12 shadow-md border border-amber-100">
+            <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none transform translate-x-12 translate-y-12">
+                <span class="text-[250px] select-none">🍲</span>
+            </div>
+            
+            <div class="max-w-3xl">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-800 text-[#FCFAF2] shadow-sm">
+                    小六國語・第四課
+                </span>
+                <h2 class="text-3xl md:text-5xl font-black text-amber-950 mt-4 leading-tight serif-font">
+                    當美食詩歌遇上<br class="sm:hidden" /><span class="text-amber-800">在地人文與資訊思維</span>
+                </h2>
+                <p class="text-sm md:text-base text-slate-700 mt-4 leading-relaxed">
+                    本課精選方群老師的《鼎邊趖》與《肉圓》兩首優美童詩。這碗盛滿廟口記憶的鼎邊趖，以及包覆救命恩情的北斗肉圓，背後都刻骨銘心地寫著臺灣常民在天災大雨中，不屈不撓、互助開創的土地情懷。
+                    讓我們解鎖句型，拆解說明結構，進入肉圓的時序智慧工廠，開啟這場文學與科技的跨領域饗宴！
+                </p>
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <button onclick="scrollToSection('grammar')" class="bg-amber-800 hover:bg-amber-900 text-white font-semibold px-6 py-3 rounded-xl transition shadow-lg">
+                        開始句型特訓 ➔
+                    </button>
+                    <button onclick="scrollToSection('factory')" class="bg-white/80 hover:bg-white text-amber-950 font-semibold px-6 py-3 rounded-xl border border-amber-200 transition shadow">
+                        啟動北斗肉圓工廠
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+        1. 課文精華導讀 (Guide)
+        ========================================== -->
+        <section id="guide" class="scroll-mt-20">
+            <div class="flex items-center space-x-2 mb-6">
+                <span class="p-2 bg-amber-100 text-amber-900 rounded-lg text-lg">🏺</span>
+                <h3 class="text-2xl font-bold text-amber-950 serif-font">單元一：課文精華導讀與人文故事</h3>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- 左側：精華介紹與飲食歷史 -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-amber-100/50">
+                        <h4 class="text-xl font-bold text-amber-900 mb-4 flex items-center serif-font">
+                            <span class="mr-2">🍲</span> 走入常民歲月，探尋小吃背後的人文厚度
+                        </h4>
+                        <p class="text-slate-600 leading-relaxed text-sm md:text-base mb-4">
+                            臺灣的特色平民小吃並非憑空誕生，而是深刻地交織著當地的天災、氣候與社會關懷。方群老師的《臺灣美食詩選》透過極致的感官、擬人與修辭，將這些記錄在泥土與米漿中的歷史，轉譯為能吟誦的美味詩篇。
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                            <div class="p-4 bg-amber-50/40 rounded-xl border border-amber-100/60">
+                                <span class="text-xs text-amber-800 font-bold uppercase tracking-wider block mb-1">《肉圓》救命恩情</span>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    清朝彰化北斗發生水災，糧食短缺，先人突發奇想將水退後僅存的地瓜晒乾、磨粉揉團蒸熟救助飢餓的災民，因此肉圓包裹著最原始的「互助大愛」。
+                                </p>
+                            </div>
+                            <div class="p-4 bg-yellow-50/40 rounded-xl border border-yellow-100/60">
+                                <span class="text-xs text-yellow-800 font-bold uppercase tracking-wider block mb-1">《鼎邊趖》滑動美感</span>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    在滾熱的鼎邊徐緩滑行，生動刻畫米漿受熱凝固的動態。它是歲月的鮮美記憶，見證了基隆廟口的四季更迭與數代人的溫飽。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 歷史小知識 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-amber-100/50">
+                        <h4 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-6">習作延伸小吃歷史足跡</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                            
+                            <div class="relative group">
+                                <span class="text-xs font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded">彰化肉圓</span>
+                                <h5 class="font-bold text-slate-800 text-sm mt-2 mb-1">大水過後的重生</h5>
+                                <p class="text-xs text-slate-500 leading-relaxed">水退後僅存地瓜粉製成，是窮則變、變則通的救荒產物，如今發展為蒸與炸多元吃法，傳香千里。</p>
+                            </div>
+
+                            <div class="relative group">
+                                <span class="text-xs font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded">臺南擔仔麵</span>
+                                <h5 class="font-bold text-slate-800 text-sm mt-2 mb-1">風浪「小月」的開拓</h5>
+                                <p class="text-xs text-slate-500 leading-relaxed">七八月常有大風浪，漁民無法出海的「小月」生計受限，挑起擔子賣麵貼補家用，成就府城美食名片。</p>
+                            </div>
+
+                            <div class="relative group">
+                                <span class="text-xs font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded">深坑臭豆腐</span>
+                                <h5 class="font-bold text-slate-800 text-sm mt-2 mb-1">發酵變異的美味</h5>
+                                <p class="text-xs text-slate-500 leading-relaxed">豆腐不易保存，烈日曝晒意外發酵成獨特香氣。經不斷研發演變為麻辣、清蒸與香炸，引領美食旋風。</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：課程設計師教學引導 -->
+                <div class="bg-gradient-to-b from-amber-900 to-amber-950 text-[#FCFAF2] p-6 md:p-8 rounded-2xl flex flex-col justify-between shadow-md">
+                    <div>
+                        <span class="text-xs bg-amber-800 text-[#FCFAF2] px-3 py-1 rounded-full font-bold uppercase tracking-wider block w-max mb-3">教學引導與鷹架</span>
+                        <h4 class="text-xl font-bold mb-4 serif-font">讀寫轉換核心重點</h4>
+                        <p class="text-xs text-amber-100/90 leading-relaxed mb-6">
+                            教師引導學生進行寫作轉換時，務必提醒：食物不僅是用來滿足味蕾，它的材料與製作與這片土地上的「大自然限制」和「溫暖人情」息息相關。我們要把平凡的紀實文字（例如配料、歷史），藉由感官修辭重組為富有靈魂的童詩。
+                        </p>
+                        <ul class="space-y-3 text-xs text-amber-100/80">
+                            <li class="flex items-start">
+                                <span class="text-amber-400 mr-2">✦</span>
+                                <div><strong>遞進複句：</strong>用來深化情感與歷史，凸顯客觀事物到情感共鳴。</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-amber-400 mr-2">✦</span>
+                                <div><strong>選擇複句：</strong>藉由設問引導學生反思食物背後的情義。</div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-amber-400 mr-2">✦</span>
+                                <div><strong>說明手法：</strong>辨析豆腐、鳳梨酥的「分解時序」與「舉例描述」。</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pt-6 border-t border-amber-800/60 mt-6">
+                        <button onclick="scrollToSection('grammar')" class="w-full bg-amber-700 hover:bg-amber-600 text-white text-xs font-bold py-3 px-4 rounded-xl transition text-center shadow">
+                            前往語文特訓室 ➔
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+        2. 語文句型特訓室 (Grammar)
+        ========================================== -->
+        <section id="grammar" class="scroll-mt-20">
+            <div class="flex items-center space-x-2 mb-6">
+                <span class="p-2 bg-amber-100 text-amber-900 rounded-lg text-lg">➕</span>
+                <h3 class="text-2xl font-bold text-amber-950 serif-font">單元二：語文句型特訓室</h3>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- 遞進複句特訓區 -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-amber-100/50 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xs font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md">遞進複句特訓</span>
+                            <span class="text-xs text-slate-400">「不僅……更……」</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-amber-900 mb-2 serif-font">鼎邊趖的人文遞進</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4">
+                            當我們描寫一項傳承的美食時，後半句的語意要比前半句的語意深進一層。將客觀的「在地歷史」遞進為深厚主觀的「鮮美記憶」。
+                        </p>
+
+                        <!-- 互動：詞牌拼圖 -->
+                        <div class="bg-[#FAF8F0] p-4 rounded-xl border border-amber-100/30 mb-6">
+                            <h5 class="text-xs font-bold text-amber-800 mb-2">🧩 句子重組拖放 (請依正確語序點擊詞牌)</h5>
+                            
+                            <!-- 插槽區 -->
+                            <div id="p1-slots" class="flex flex-wrap gap-2 min-h-[50px] p-2 bg-white rounded-lg border border-dashed border-amber-200 mb-3 text-sm">
+                                <!-- Selected parts go here -->
+                            </div>
+
+                            <!-- 詞牌區 -->
+                            <div id="p1-pool" class="flex flex-wrap gap-2 text-xs">
+                                <!-- Draggable-like tiles but click to move for high mobile compatibility -->
+                            </div>
+
+                            <div class="flex justify-between items-center mt-3">
+                                <button onclick="checkP1()" class="bg-amber-800 hover:bg-amber-950 text-white text-xs px-4 py-2 rounded-lg font-bold transition">驗證語序</button>
+                                <button onclick="resetP1()" class="text-amber-800 hover:underline text-xs">重置詞牌</button>
+                                <span id="p1-result-badge" class="text-xs font-bold px-2.5 py-1 rounded-md hidden"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 選擇複句特訓區 -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-amber-100/50 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xs font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md">選擇複句特訓</span>
+                            <span class="text-xs text-slate-400">「是……還是……」</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-amber-900 mb-2 serif-font">肉圓背後的情義選擇</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4">
+                            藉由二擇一的設問結構，引導讀者不僅停留在「舌尖的美味」，而是把思維拉高到感念「先人的救災恩情」，喚醒對這片土地的同理心。
+                        </p>
+
+                        <!-- 互動：詞牌拼圖2 -->
+                        <div class="bg-[#FAF8F0] p-4 rounded-xl border border-amber-100/30 mb-6">
+                            <h5 class="text-xs font-bold text-amber-800 mb-2">🧩 句子重組拖放 (請依正確語序點擊詞牌)</h5>
+                            
+                            <!-- 插槽區 -->
+                            <div id="p2-slots" class="flex flex-wrap gap-2 min-h-[50px] p-2 bg-white rounded-lg border border-dashed border-amber-200 mb-3 text-sm">
+                                <!-- Selected parts go here -->
+                            </div>
+
+                            <!-- 詞牌區 -->
+                            <div id="p2-pool" class="flex flex-wrap gap-2 text-xs">
+                                <!-- Tiles -->
+                            </div>
+
+                            <div class="flex justify-between items-center mt-3">
+                                <button onclick="checkP2()" class="bg-amber-800 hover:bg-amber-950 text-white text-xs px-4 py-2 rounded-lg font-bold transition">驗證語序</button>
+                                <button onclick="resetP2()" class="text-amber-800 hover:underline text-xs">重置詞牌</button>
+                                <span id="p2-result-badge" class="text-xs font-bold px-2.5 py-1 rounded-md hidden"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 創意寫作挑戰 -->
+            <div class="mt-8 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-amber-100/50">
+                <h4 class="text-lg font-bold text-amber-900 mb-2 serif-font">✍️ 創意寫作挑戰：介紹臺灣小吃與童詩改寫</h4>
+                <p class="text-xs text-slate-500 leading-relaxed mb-4">
+                    請在外國朋友來訪時，向他們介紹一項帶有「歷史或奮鬥故事」的臺灣美食（例如彰化肉圓的水災救濟、擔仔麵在無法捕魚的「小月」奮鬥記），首先寫成一段介紹文字，再進一步將其轉化為分行且有韻律的美食童詩！
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-amber-900">1. 先寫成「紀實介紹文字」（說明由來與歷史意義）</label>
+                        <textarea id="creative-text" rows="5" class="w-full p-3 text-xs bg-[#FAF8F0] border border-amber-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="例如：向外國朋友介紹，擔仔麵源自清代臺南，在七八月颱風大風浪的「小月」期間，漁民無法捕魚，因此挑著擔子賣麵求生。這記錄了先民對環境永不屈服的堅毅。"></textarea>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-amber-900">2. 進一步改寫成「優美童詩」（加入感官與修辭描寫）</label>
+                        <textarea id="creative-poem" rows="5" class="w-full p-3 text-xs bg-[#FAF8F0] border border-amber-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="例如：
+當狂風與怒濤鎖住海洋，
+絕望的小月在港灣悄悄蔓延。
+挑起沉重的木擔，
+滾沸的清湯裡，
+熱麵與蒜絲在熱霧中快樂相遇，
+溫暖了數代人的歲月。"></textarea>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center mt-4">
+                    <span class="text-[11px] text-slate-400">寫作挑戰完成後，點擊送出即可複製至班級聯絡簿，並在網頁上驗證你的文學素養！</span>
+                    <button onclick="submitCreativeChallenge()" class="bg-amber-800 hover:bg-amber-900 text-[#FCFAF2] text-xs font-bold py-2.5 px-6 rounded-xl transition shadow">送出並複製全文</button>
+                </div>
+                <div id="creative-feedback" class="mt-4 p-3 bg-emerald-50 text-emerald-800 rounded-xl text-xs hidden"></div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+        3. 說明手法大拆解 (Explanation Methods)
+        ========================================== -->
+        <section class="scroll-mt-20">
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-amber-100/50">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center space-x-2">
+                        <span class="p-2 bg-amber-100 text-amber-900 rounded-lg text-lg">📊</span>
+                        <h4 class="text-xl font-bold text-amber-950 serif-font">單元三：說明手法大拆解：分解說明 vs 舉例說明</h4>
+                    </div>
+                    <span class="text-xs bg-amber-100 text-amber-900 px-3 py-1 rounded-full font-bold">習作重點特訓</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 text-xs text-slate-600">
+                    <div class="p-5 bg-[#FCFAF2] rounded-xl border border-amber-100/60">
+                        <h5 class="font-bold text-amber-900 text-sm mb-2 flex items-center serif-font">
+                            <span class="mr-2">①</span> 分解說明法（對應時序演算法）
+                        </h5>
+                        <p class="leading-relaxed">
+                            將一個複雜的「製造程序（如豆腐或肉圓作法）」依照「時間」或「因果關係」拆解為按部就班的微小步驟。若步驟反置，最終成品將邏輯崩潰（如未加水揉成糰直接入滾水將融化為地瓜水）。
+                        </p>
+                    </div>
+
+                    <div class="p-5 bg-[#FCFAF2] rounded-xl border border-amber-100/60">
+                        <h5 class="font-bold text-amber-900 text-sm mb-2 flex items-center serif-font">
+                            <span class="mr-2">②</span> 舉例說明法（模式關聯與類比）
+                        </h5>
+                        <p class="leading-relaxed">
+                            當要表達一個抽象的概念（如臭豆腐吃法很多樣、或小吃種類極為廣泛）時，使用「例如、像是」等關鍵詞列舉出具體的代表實例，幫助讀者產生模式對照。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 連連看實戰 -->
+                <div class="border-t border-slate-100 pt-6">
+                    <h5 class="text-sm font-bold text-slate-800 mb-4 flex items-center">
+                        🎯 連連看現學現賣 (考查小學語文習作第28-29頁關於臭豆腐與豆腐的製作手法)
+                    </h5>
+                    <div class="space-y-4">
+                        <!-- 題目 A -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-50 rounded-xl gap-3">
+                            <div class="flex-1">
+                                <span class="inline-block px-2 py-0.5 rounded bg-amber-800 text-white text-[10px] mr-2">段落 A</span>
+                                <span class="text-xs text-slate-700 font-medium">「師傅為臭豆腐研發多元的烹飪方式，不論是以麻辣高湯熬煮、拌著蒜絲與肉末清蒸，或是油炸後淋上醬料，總能成為受歡迎的美食。」</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button id="match-a-example" onclick="selectMatch('A', 'example')" class="match-btn px-3 py-1.5 rounded-lg text-xs font-semibold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-100">
+                                    舉例說明法
+                                </button>
+                                <button id="match-a-decompose" onclick="selectMatch('A', 'decompose')" class="match-btn px-3 py-1.5 rounded-lg text-xs font-semibold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-100">
+                                    分解說明法
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 題目 B -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-50 rounded-xl gap-3">
+                            <div class="flex-1">
+                                <span class="inline-block px-2 py-0.5 rounded bg-amber-800 text-white text-[10px] mr-2">段落 B</span>
+                                <span class="text-xs text-slate-700 font-medium">「首先，把泡軟的黃豆加水磨成汁，接著用紗布過濾豆渣，再把過濾後的豆漿加熱熬煮，最後點滷水凝固，美味的豆腐就完成了。」</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button id="match-b-example" onclick="selectMatch('B', 'example')" class="match-btn px-3 py-1.5 rounded-lg text-xs font-semibold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-100">
+                                    舉例說明法
+                                </button>
+                                <button id="match-b-decompose" onclick="selectMatch('B', 'decompose')" class="match-btn px-3 py-1.5 rounded-lg text-xs font-semibold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-100">
+                                    分解說明法
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 flex items-center justify-between">
+                        <button onclick="checkMatch()" class="bg-slate-800 hover:bg-slate-900 text-[#FCFAF2] text-xs font-bold py-2.5 px-5 rounded-xl transition shadow">
+                            校對連連看解答
+                        </button>
+                        <span id="match-result-badge" class="text-xs font-bold px-3 py-1.5 rounded-lg hidden"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+        4. 智慧演算法工廠 (Factory)
+        ========================================== -->
+        <section id="factory" class="scroll-mt-20">
+            <div class="flex items-center space-x-2 mb-6">
+                <span class="p-2 bg-amber-100 text-amber-900 rounded-lg text-lg">⚙️</span>
+                <h3 class="text-2xl font-bold text-amber-950 serif-font">單元四：時序與寫作演算法智慧工廠</h3>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- 左側：彰化北斗肉圓製作演算法 - 佔 7 欄 -->
+                <div class="lg:col-span-7 bg-slate-900 text-slate-100 p-6 md:p-8 rounded-3xl shadow-xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <span class="text-[10px] font-mono bg-[#854d0e] text-[#FCFAF2] px-2 py-0.5 rounded tracking-widest uppercase">HISTORICAL ALGORITHM COMPILER</span>
+                                <h4 class="text-lg md:text-xl font-bold text-white mt-1">⚙️ 北斗肉圓歷史時序組裝線</h4>
+                            </div>
+                            <button onclick="resetFactory()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-1.5 px-3 rounded-lg border border-slate-700 transition">
+                                重置組裝線
+                            </button>
+                        </div>
+
+                        <p class="text-xs text-slate-400 leading-relaxed mb-6">
+                            說明文的<strong>「分解說明法」</strong>，就如同軟體工程中的<strong>「時序演算法」</strong>。每一個步驟都存在明確的因果相依性。若您把步驟順序弄錯，您的肉圓將面臨散落、融化或乾硬的危機！
+                            請點選下方打亂的「原料步驟積木」，將其按正確的北斗肉圓製作工藝時序，依序送入組裝線！
+                        </p>
+
+                        <!-- 積木原料池 -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 mb-6">
+                            <span class="text-[11px] font-mono text-amber-500 uppercase tracking-wider block mb-2">🛠️ 時序步驟積木原料池（已隨機打亂）</span>
+                            <div id="factory-pool" class="flex flex-wrap gap-2">
+                                <!-- buttons rendered dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- 插槽組裝線 -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 mb-6">
+                            <span class="text-[11px] font-mono text-cyan-400 uppercase tracking-wider block mb-3">⚙️ 肉圓分解說明演算法組裝線 (FLOW DIAGRAM)</span>
+                            <div id="factory-slots" class="grid grid-cols-1 gap-2.5">
+                                <!-- slots rendered dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- 動態物理模擬器 SVG/CSS -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 mb-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[11px] font-mono text-slate-500 uppercase tracking-wider">CULINARY PHYSICAL PROCESS SIMULATOR</span>
+                                <span class="text-xs font-bold text-slate-400">
+                                    模擬狀態：
+                                    <span id="compiler-status-text" class="text-slate-500">待機中 (STANDBY)</span>
+                                </span>
+                            </div>
+
+                            <div class="h-28 bg-[#151c2c] rounded-lg flex items-center justify-center relative overflow-hidden">
+                                <!-- SVG 烹煮與攪拌動畫 -->
+                                <div class="flex items-center space-x-8 z-10">
+                                    <!-- 研磨地瓜粉 -->
+                                    <div id="sim-step-1" class="flex flex-col items-center opacity-30 transition-all duration-300">
+                                        <svg class="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.907c.961 0 1.35 1.18.588 1.81l-3.97 2.883a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.971-2.883a1 1 0 00-1.17 0l-3.97 2.883c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.05 10.1c-.761-.63-.372-1.81.587-1.81H7.55a1 1 0 00.95-.69l1.52-4.674z" />
+                                        </svg>
+                                        <span class="text-[10px] mt-1 text-slate-400">1.地瓜磨粉</span>
+                                    </div>
+
+                                    <!-- 揉粉成團 -->
+                                    <div id="sim-step-2" class="flex flex-col items-center opacity-30 transition-all duration-300">
+                                        <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span class="text-[10px] mt-1 text-slate-400">2.加水揉團</span>
+                                    </div>
+
+                                    <!-- 清蒸籠 -->
+                                    <div id="sim-step-3" class="flex flex-col items-center relative opacity-30 transition-all duration-300">
+                                        <div id="boiler-steam" class="absolute -top-3 left-3 flex space-x-1 hidden">
+                                            <span class="w-1 h-3 bg-slate-300 rounded-full animate-bounce"></span>
+                                            <span class="w-1 h-2 bg-slate-200 rounded-full animate-bounce" style="animation-delay: 0.15s"></span>
+                                            <span class="w-1 h-4 bg-slate-100 rounded-full animate-bounce" style="animation-delay: 0.3s"></span>
+                                        </div>
+                                        <svg class="w-8 h-8 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857" />
+                                        </svg>
+                                        <span class="text-[10px] mt-1 text-slate-400">4.清蒸定型</span>
+                                    </div>
+
+                                    <!-- 油炸鍋 -->
+                                    <div id="sim-step-4" class="flex flex-col items-center opacity-30 transition-all duration-300 relative">
+                                        <div id="oil-bubbles" class="absolute -top-2 left-2 flex space-x-0.5 hidden">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-ping"></span>
+                                            <span class="w-2 h-2 rounded-full bg-yellow-300 animate-ping" style="animation-delay: 0.2s"></span>
+                                        </div>
+                                        <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l-.707-.707" />
+                                        </svg>
+                                        <span class="text-[10px] mt-1 text-slate-400">5.溫潤油炸</span>
+                                    </div>
+                                </div>
+
+                                <!-- 成功粒子動畫 -->
+                                <div id="success-particles" class="absolute inset-0 bg-[#0f172a]/40 backdrop-blur-[1px] pointer-events-none flex flex-wrap gap-3 p-2 overflow-hidden items-end justify-center hidden">
+                                    <!-- Dynamic elements -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 控制台日誌 Console Logs -->
+                        <div class="bg-[#0b1019] p-4 rounded-xl border border-slate-800 font-mono text-xs">
+                            <span class="text-slate-500 uppercase tracking-wider text-[10px] block mb-2">▶ SYSTEM DIAGNOSTICS CONTROL LOGS:</span>
+                            <div id="compiler-logs" class="space-y-1.5 max-h-[140px] overflow-y-auto scrollbar-thin">
+                                <div class="text-slate-400">系統就緒。請將 5 個北斗肉圓工藝時序步驟放上組裝線，點擊「啟動組裝線」進行認知編譯檢驗。</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 啟動按鈕區 -->
+                    <div class="mt-6 pt-6 border-t border-slate-800/80">
+                        <button id="run-btn" onclick="runDiagnostics()" class="w-full text-center py-3 px-4 rounded-xl font-bold bg-[#CA8A04] hover:bg-yellow-500 text-slate-950 font-black shadow-lg transition duration-200 flex items-center justify-center space-x-2">
+                            <span>啟動時序組裝線 (COMPILE & RUN)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 右側：寫作結構產生器 - 佔 5 欄 -->
+                <div id="generator" class="lg:col-span-5 bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-amber-100 flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-lg font-bold text-amber-950 mb-2 flex items-center serif-font">
+                            🎨 臺灣小吃寫作結構產生器
+                        </h4>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4">
+                            融合本課精髓「分解說明法（時序演算法）」與「舉例說明法（搭配與歷史）」，為你喜愛的臺灣傳統小吃繪製一張具有專業邏輯的「文學工程藍圖」。
+                        </p>
+
+                        <!-- 快速模版按鈕 -->
+                        <div class="mb-6">
+                            <span class="text-[11px] font-bold text-amber-900 block mb-2">載入經典小吃寫作配置藍圖範本：</span>
+                            <div class="grid grid-cols-4 gap-1.5">
+                                <button onclick="loadTemplate('肉圓')" class="bg-amber-50 hover:bg-amber-100/80 text-amber-900 text-[10px] font-bold py-1 px-1.5 rounded-lg border border-amber-200 transition">🍲 肉圓</button>
+                                <button onclick="loadTemplate('擔仔麵')" class="bg-amber-50 hover:bg-amber-100/80 text-amber-900 text-[10px] font-bold py-1 px-1.5 rounded-lg border border-amber-200 transition">🍜 擔仔麵</button>
+                                <button onclick="loadTemplate('臭豆腐')" class="bg-amber-50 hover:bg-amber-100/80 text-amber-900 text-[10px] font-bold py-1 px-1.5 rounded-lg border border-amber-200 transition">🪵 臭豆腐</button>
+                                <button onclick="clearTemplate()" class="bg-slate-50 hover:bg-slate-100 text-slate-500 text-[10px] py-1 px-1.5 rounded-lg border border-slate-200 transition">🧹 清空</button>
+                            </div>
+                        </div>
+
+                        <!-- 輸入表單 -->
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-500 block mb-1">小吃名稱 (Food Name)</label>
+                                <input type="text" id="food-name" placeholder="例如：鹽酥雞" oninput="updateBlueprint()" class="w-full bg-[#FCFAF2] border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500 text-xs text-slate-700 font-semibold" />
+                            </div>
+
+                            <!-- 分解說明：時序步驟 -->
+                            <div class="p-3 bg-amber-50/20 rounded-xl border border-amber-100">
+                                <span class="text-[10px] font-mono text-amber-800 font-bold uppercase tracking-wider block mb-2">Decomposition（時序步驟演算法）</span>
+                                <div class="space-y-2">
+                                    <div>
+                                        <span class="text-[10px] text-slate-400 block">步驟 1：主材料製備</span>
+                                        <input type="text" id="food-step-1" placeholder="例如：將嫩雞肉切塊醃製，均勻裹上地瓜粉..." oninput="updateBlueprint()" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500 text-xs" />
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] text-slate-400 block">步驟 2：熱處理與起鍋</span>
+                                        <input type="text" id="food-step-2" placeholder="例如：投入高溫油鍋中炸至酥脆，起鍋前加入九層塔提味..." oninput="updateBlueprint()" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500 text-xs" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 舉例說明：搭配與關係 -->
+                            <div class="p-3 bg-yellow-50/20 rounded-xl border border-yellow-100">
+                                <span class="text-[10px] font-mono text-yellow-800 font-bold uppercase tracking-wider block mb-2">Exemplification（關係配對與歷史緣由）</span>
+                                <div class="space-y-2">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <span class="text-[10px] text-slate-400 block">主角 (Main)</span>
+                                            <input type="text" id="food-main" placeholder="例如：椒鹽酥脆雞肉" oninput="updateBlueprint()" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500 text-xs" />
+                                        </div>
+                                        <div>
+                                            <span class="text-[10px] text-slate-400 block">配角 (Partner)</span>
+                                            <input type="text" id="food-partner" placeholder="例如：九層塔精油芬芳" oninput="updateBlueprint()" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500 text-xs" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] text-slate-400 block">為什麼這兩者是完美平衡？(歷史人文或搭配科學原因)</span>
+                                        <textarea rows="2" id="food-reason" placeholder="例如：九層塔的強烈清香能巧妙中和油炸物的油膩，讓椒鹽的香氣散發到極致，展現臺灣常民街頭的美味平衡..." oninput="updateBlueprint()" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500 text-xs leading-relaxed"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 即時預覽與複製 -->
+                    <div class="mt-6 pt-6 border-t border-slate-100 space-y-4">
+                        <div class="bg-amber-950 text-amber-100 p-4 rounded-xl border border-amber-900 font-mono text-xs shadow-inner">
+                            <div class="flex justify-between items-center mb-3 border-b border-amber-900 pb-2">
+                                <span class="text-[10px] uppercase tracking-widest text-amber-500">DWG NO: LOCAL-FOOD-Blueprint</span>
+                                <span class="text-[10px] uppercase text-amber-500">SCALE: 1:1 ACTIVE</span>
+                            </div>
+                            <h5 class="font-bold text-white mb-2 text-sm flex items-center serif-font">
+                                🎨 【<span id="bp-preview-title">未命名台灣小吃</span>】說明文寫作預覽
+                            </h5>
+                            <p id="bp-preview-text" class="leading-relaxed text-amber-100/90 text-[11px] h-28 overflow-y-auto scrollbar-thin">
+                                <!-- Blueprint generated here -->
+                            </p>
+                        </div>
+
+                        <div class="flex space-x-2">
+                            <button onclick="copyEssay()" class="flex-1 bg-amber-800 hover:bg-amber-900 text-[#FCFAF2] font-bold text-xs py-2.5 rounded-xl transition flex items-center justify-center space-x-2 shadow">
+                                <span>📋 複製說明文藍圖</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==========================================
+        5. 綜合評量挑戰賽 (Quiz)
+        ========================================== -->
+        <section id="quiz" class="scroll-mt-20">
+            <div class="flex items-center space-x-2 mb-6">
+                <span class="p-2 bg-amber-100 text-amber-900 rounded-lg text-lg">🏆</span>
+                <h3 class="text-2xl font-bold text-amber-950 serif-font">單元五：臺灣美食詩選十題大師級評量挑戰賽</h3>
+            </div>
+
+            <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-amber-100/50">
+                <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-100 pb-6 mb-6 gap-4">
+                    <div>
+                        <span class="text-xs bg-amber-50 text-amber-800 px-3 py-1 rounded-full font-bold uppercase tracking-widest">實力檢驗認證區</span>
+                        <p class="text-xs text-slate-400 mt-2">本區共有 10 題深度單選題。答對 8 題（80分）以上，即可解鎖蓋印「臺灣美食世紀大師」榮譽證書！</p>
+                    </div>
+                    <div class="bg-amber-50 border border-amber-100 rounded-xl p-3 flex items-center space-x-4">
+                        <div class="text-center">
+                            <span class="text-[10px] text-slate-400 block font-bold uppercase">評量狀態</span>
+                            <span id="quiz-status" class="text-xs font-bold text-slate-500">挑戰中</span>
+                        </div>
+                        <div class="h-8 w-px bg-amber-200"></div>
+                        <div class="text-center">
+                            <span class="text-[10px] text-slate-400 block font-bold uppercase">獲得分數</span>
+                            <span id="quiz-score-display" class="text-lg font-black text-amber-800">?? 分</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 題目列表 -->
+                <div class="space-y-8" id="quiz-questions-container">
+                    <!-- Dynamic rendering of 10 questions -->
+                </div>
+
+                <!-- 提交控制 -->
+                <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap gap-3 items-center justify-between">
+                    <div class="flex space-x-2">
+                        <button id="quiz-submit-btn" onclick="submitQuiz()" class="bg-amber-800 hover:bg-amber-900 text-white font-bold text-sm py-2.5 px-6 rounded-xl transition shadow">
+                            送出評量解答
+                        </button>
+                        <button id="quiz-reset-btn" onclick="resetQuiz()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-sm py-2.5 px-6 rounded-xl transition shadow hidden">
+                            重新挑戰
+                        </button>
+                    </div>
+                    
+                    <div id="quiz-congrats" class="flex items-center space-x-3 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-2 animate-bounce hidden">
+                        <span class="text-xl">🏆</span>
+                        <div>
+                            <span class="text-xs font-bold text-emerald-800 block">恭喜大師！成功通過高難度考核！</span>
+                            <button onclick="scrollToSection('certificate')" class="text-xs font-black text-emerald-600 hover:underline">
+                                點我前往認證殿堂領取證書 ➔
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+        6. 領取榮譽證書 (Certificate)
+        ========================================== -->
+        <section id="certificate" class="scroll-mt-20">
+            <div class="flex items-center space-x-2 mb-6">
+                <span class="p-2 bg-amber-100 text-amber-900 rounded-lg text-lg">📜</span>
+                <h3 class="text-2xl font-bold text-amber-950 serif-font">單元六：臺灣之光・臺灣美食文學大師認證殿堂</h3>
+            </div>
+
+            <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-amber-100/50">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- 左側控制與說明 -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <span class="text-xs bg-amber-50 text-amber-800 px-3 py-1 rounded-full font-bold uppercase tracking-widest">成就系統證書認證</span>
+                        <h4 class="text-xl font-bold text-amber-950 leading-snug serif-font">
+                            恭喜你完成了<br />美食詩選的所有文學與時序工藝挑戰！
+                        </h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            請在下方輸入你的真實姓名或學號，我們將即時為您在 HTML5 Canvas 上繪製印有古典金框、專屬認證機構紅色大印的高清「臺灣美食文學大師」榮譽證書！
+                        </p>
+
+                        <div>
+                            <label class="text-xs font-bold text-slate-400 block mb-2">請輸入您的姓名或學號：</label>
+                            <input type="text" id="student-name" oninput="onStudentNameChange()" placeholder="例如：王小明" class="w-full bg-[#FCFAF2] border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm font-semibold text-slate-800" />
+                        </div>
+
+                        <!-- 條件警告 -->
+                        <div class="p-4 bg-amber-50/50 rounded-xl border border-amber-100/60">
+                            <span class="text-xs text-amber-800 font-bold block mb-1">💡 大師證書發放資格審查：</span>
+                            <p id="certificate-warning" class="text-[11px] text-slate-500 leading-relaxed">
+                                任何挑戰者必須在「單元五：十題大師評量挑戰賽」中獲得 80 分（含）以上，系統才能核可發放證書並解鎖下載。
+                                （目前尚未提交解答，預設名字欄位將處於預覽狀態。）
+                            </p>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2">
+                            <button id="download-cert-btn" onclick="downloadCertificate()" disabled class="bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs py-3 px-5 rounded-xl transition shadow flex items-center space-x-1.5 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span>💾 下載高清 PNG 證書</span>
+                            </button>
+                            <button onclick="copyShare()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs py-3 px-4 rounded-xl transition shadow flex items-center space-x-1.5">
+                                <span>📢 複製分享賀詞</span>
+                            </button>
+                            <button onclick="printCertificate()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-3 px-4 rounded-xl border border-slate-200 transition">
+                                <span>🖨️ 列印此證書</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 右側：Canvas 預覽渲染 -->
+                    <div class="lg:col-span-7 flex flex-col items-center justify-center">
+                        <span class="text-xs text-slate-400 mb-2">【 榮譽證書高清渲染區 (HTML5 Canvas 繪製) 】</span>
+                        <div class="w-full max-w-full overflow-hidden border border-slate-200 rounded-2xl bg-[#FCFAF2] shadow-lg">
+                            <canvas id="cert-canvas" class="w-full h-auto aspect-[1.428] block"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 底部頁腳 -->
+    <footer class="mt-20 border-t border-amber-100 pt-8 pb-12 bg-white text-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+            <div class="flex justify-center items-center space-x-2">
+                <span class="text-2xl">🍲</span>
+                <span class="font-bold text-amber-950 serif-font">第六冊第四課：臺灣美食詩選</span>
+            </div>
+            <p class="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
+                【AI 跨領域智慧教學網】配合小學國語教材《臺灣美食詩選》課程設計<br />
+                融合 SDGs 2（消除飢餓、人文歷史與糧食永續）及資訊科技時序相依演算法。
+            </p>
+            <div class="text-xs text-slate-300 font-mono">
+                "Preserving traditional memory through logic, words, and beauty."
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+    JavaScript 核心互動控制
+    ========================================== -->
+    <script>
+        // Global Constants & Raw Data
+        const TIMELINE_DATA_ITEMS = [
+            { id: "p1-1", text: "這碗熱騰騰的鼎邊趖" },
+            { id: "p1-2", text: "不僅蘊藏著廟口的在地歷史，" },
+            { id: "p1-3", text: "更記錄了數代人共同的鮮美記憶。" },
+            { id: "p1-4", text: "在人來人往的晨昏四季中，" }
+        ];
+
+        const PUZZLE_2_ITEMS = [
+            { id: "p2-1", text: "當我們品嚐著晶瑩透亮的肉圓時，" },
+            { id: "p2-2", text: "是單純滿足於舌尖上的美味，" },
+            { id: "p2-3", text: "還是默默感念" },
+            { id: "p2-4", text: "先人洪水過後互助的恩情？" }
+        ];
+
+        const INITIAL_FACTORY_BLOCKS = [
+            { id: "b1", text: "地瓜晒乾磨粉", step: 1 },
+            { id: "b2", text: "加水揉成團狀", step: 2 },
+            { id: "b3", text: "包裹豬肉竹筍", step: 3 },
+            { id: "b4", text: "高溫清蒸定型", step: 4 },
+            { id: "b5", text: "溫潤油炸盛盤", step: 5 }
+        ];
+
+        const FOOD_TEMPLATES = {
+            肉圓: {
+                name: "彰化北斗肉圓",
+                step1: "將大水過後僅存的地瓜晒乾、磨粉，揉成晶瑩透亮的地瓜粉糰外皮",
+                step2: "包裹入醃製好的鮮嫩後腿豬肉丁與爽口竹筍，清蒸定型後放入溫潤慢油中低溫慢炸",
+                main: "Q彈帶勁的地瓜粉糰外皮、筍丁與豬肉餡",
+                partner: "濃郁帶甜的特製紅槽米醬與一抹翠綠香菜",
+                reason: "北斗水災之時，先人運用晒乾的地瓜粉揉熟救災，那是包覆著救命恩情的歷史印記。米醬的甜與香菜的特殊香氣，正好平衡了豬肉竹筍的油脂感，在冷與熱、Q與脆的融合中，完美傳承著百年來土地的溫情歷史。"
+            },
+            擔仔麵: {
+                name: "臺南擔仔麵",
+                step1: "漁民在七八月颱風颳大風無法出海捕魚的「小月」淡季，挑起木擔在市集邊沿街叫賣熱麵",
+                step2: "端起一碗小小的湯麵，大火滾沸的鮮甜蝦頭高湯中，澆淋上手工慢熬的香濃肉燥與一尾鮮蝦",
+                main: "飽滿Q彈的湯麵、五肉慢火熬煮的肉燥",
+                partner: "蒜泥、五味醋與畫龍點睛的翠綠香菜",
+                reason: "七、八月漁業限制的「小月」危機，激發了先民挑擔沿街賣麵貼補家用的智慧。蝦頭鮮甜湯底與微酸五味醋、蒜泥的搭配，解去了慢熬肉燥的濃厚油膩，在穿梭靠近的聲音中，溫飽了遊客，也成為一幅閃耀府城的堅毅歷史名片。"
+            },
+            臭豆腐: {
+                name: "深坑臭豆腐",
+                step1: "豆腐在烈日曝晒與不易保存的環境下意外發酵，師傅順應其特殊發酵香氣進行烹飪研發",
+                step2: "切塊高溫油炸至外皮金黃蓬鬆，捞起後在中間挖孔，填入特製蒜蓉醬、油膏與泡菜",
+                main: "外表金黃酥脆、咬下飽滿多汁的發酵臭豆腐",
+                partner: "酸甜清脆、冰涼爽口的台式高麗菜泡菜與蒜泥",
+                reason: "原本是保存不易而帶有濃烈氣味的「惡臭」發酵豆腐，先民卻研發出麻辣、肉末清蒸等多元烹飪。熱熱油炸豆腐的香氣油脂，配上冰涼酸甜的清脆泡菜，能在一熱一冷、一酥一脆的對撞間，洗滌味蕾，將保存危機轉化為大受歡迎的臺灣奇蹟吃法。"
+            }
+        };
+
+        const QUIZ_QUESTIONS = [
+            {
+                id: 1,
+                question: "1. 關於肉圓一詩中「滾滾的洪水之後，晒乾的地瓜，包覆著救命的恩情」這段詩句，下列敘述何者最正確？",
+                options: [
+                    { key: "A", text: "描寫彰化北斗曾因洪水導致饑荒，居民用晒乾地瓜救災的互助歷史。" },
+                    { key: "B", text: "說明肉圓是因大旱災導致沒水喝，居民隨手發明的消暑聖品。" },
+                    { key: "C", text: "證明臺灣地瓜生命力強韌，不論洪水如何沖刷都依然能完美生長。" }
+                ],
+                answer: "A",
+                explain: "此詩句扣合肉圓的歷史典故。清朝彰化北斗發生水災導致糧食短缺，先人將地瓜晒乾、磨粉揉團煮熟救助災民，因此作者才會說它「包覆著救命的恩情」，傳遞著人與人之間互相扶持的溫暖。"
+            },
+            {
+                id: 2,
+                question: "2. 根據《鼎邊趖》課文簡介，「趖」這個字在閩南語中代表什麼意思？",
+                options: [
+                    { key: "A", text: "快速攪拌、大火翻炒。" },
+                    { key: "B", text: "慢慢滑動、徐緩移動。" },
+                    { key: "C", text: "熱水滾沸、冒出氣泡。" }
+                ],
+                answer: "B",
+                explain: "課文簡介明確指出，「趖」（閩南語音 sô）是指慢慢滑動的意思。正如詩中所寫「雪白的在來米漿，沿著滾熱的鼎邊，緩緩滑行」，生動地模擬了米漿沿著鍋邊向下滑行受熱凝固的動態美感。"
+            },
+            {
+                id: 3,
+                question: "3. 「這碗熱騰騰的鼎邊趖不僅蘊藏著廟口的在地歷史，更記錄了數代人共同的鮮美記憶。」關於這句「遞進複句」的分析，下列哪一項最正確？",
+                options: [
+                    { key: "A", text: "「更記錄了數代人共同的鮮美記憶」是前面句子的延伸，情感深度比「蘊藏在地歷史」更進一層。" },
+                    { key: "B", text: "「不僅……更……」在這裡是用來表達兩個完全不相干的事物，前後分句可以隨意調換。" },
+                    { key: "C", text: "這句話是在強迫讀者在「廟口歷史」與「鮮美記憶」中二選一。" }
+                ],
+                answer: "A",
+                explain: "遞進複句的「不僅……更……」表示後者分句的語意要更深一層。「在地歷史」是客觀的過去，而代代相傳、刻骨銘心的「鮮美記憶」則是主觀且深厚的情感共鳴，因此放在後半句能產生「層層遞進」的昇華感。"
+            },
+            {
+                id: 4,
+                question: "4. 「當我們品嚐著晶瑩透亮的肉圓時，是單純滿足於舌尖上的美味，還是默默感念先人洪水過後互助的恩情？」關於這個「選擇複句」的理解，下列哪一項最合理？",
+                options: [
+                    { key: "A", text: "句子暗示只有天天感念恩情的人，才配吃肉圓。" },
+                    { key: "B", text: "這句話提供兩個並列的情況，引導我們在品嚐美味時，也要反思食物背後的情感與歷史。" },
+                    { key: "C", text: "因為「是」和「還是」不能同時存在，所以讀者只能承認自己是貪吃的人。" }
+                ],
+                answer: "B",
+                explain: "選擇複句在此處並非要批判讀者，而是提供兩種品嚐美食的視角。透過「是美味」還是「是感念恩情」的二擇一設問，帶領學生在享受美食的同時，產生人文關懷與歷史同理心。"
+            },
+            {
+                id: 5,
+                question: "5. 國語習作中提到：「首先，把泡軟的黃豆加水磨成汁，接著用紗布過濾豆渣，再把過濾後的豆漿加熱熬煮，最後點滷水凝固，美味的豆腐就完成了。」這段文字主要使用了哪一種說明手法？",
+                options: [
+                    { key: "A", text: "舉例說明法（透過豆腐的各種料理來說明其廣受歡迎的程度）。" },
+                    { key: "B", text: "分解說明法（依步驟時間順序詳細拆解豆腐製作的完整演算法）。" },
+                    { key: "C", text: "比較說明法（將黃豆與綠豆豆腐進行營養成分的優劣對照）。" }
+                ],
+                answer: "B",
+                explain: "該段落使用「首先、接著、再、最後」等時間與步驟關聯詞，將豆腐製作的複雜動態程序依序拆解，讓讀者能一步步跟著實作，這是典型的「分解說明法」（時序演算法）。"
+            },
+            {
+                id: 6,
+                question: "6. 國語習作第一大題敘述了臭豆腐的起源：「豆腐保存不易，烈日曝晒下竟然散發濃烈氣味……師傅研發出多元烹飪方式，例如：以麻辣高湯熬煮、拌著蒜絲與肉末清蒸、或是油炸後淋上醬料……」這段話使用了哪種說明手法？",
+                options: [
+                    { key: "A", text: "分解說明法（詳細拆解製作滷水配方的每一公克比例）。" },
+                    { key: "B", text: "舉例說明法（列舉出「麻辣熬煮、肉末清蒸、油炸淋醬」等多元吃法）。" },
+                    { key: "C", text: "譬喻說明法（把臭豆腐比喻成高掛夜空中的明月）。" }
+                ],
+                answer: "B",
+                explain: "該段落使用了「例如：……」關聯詞，舉出了三種不同的烹飪方式（麻辣、清蒸、油炸）作為具體實例，來說明臭豆腐吃法的多樣化，這屬於「舉例說明法」。"
+            },
+            {
+                id: 7,
+                question: "閱讀課本中《肉圓》童詩，作者描寫「筍丁與後腿肉快樂相遇」。這句話運用了什麼修辭法，能產生什麼樣的文學美感？",
+                options: [
+                     { key: "A", text: "譬喻法：將筍丁與豬肉比喻成戰場上的士兵，充滿了緊張感。" },
+                     { key: "B", text: "擬人法：賦予筍丁與豬肉人類的「快樂」情感與「相遇」動作，讓內餡搭配顯得活潑、有生命力。" },
+                     { key: "C", text: "設問法：透過不斷向讀者提問，引導大家猜測碗裡到底裝了什麼。" }
+                ],
+                answer: "B",
+                explain: "將原本沒有生命的「筍丁」與「後腿肉」賦予「快樂、相遇」等人類的情感與動態，這是「擬人法」的運用。這種修辭讓食材的融合過程變得趣味橫生，彷彿一場快樂的聚會。"
+            },
+            {
+                id: 8,
+                question: "8. 閱讀習作中關於《擔仔麵》的介紹：「每年到了七、八月，漁民因風大無法出海捕魚，導致困苦的日子被稱之為『小月』。此時漁民會挑著擔子到市集賣麵，補貼家用……」請問這個名稱背後蘊含了什麼歷史情懷？",
+                options: [
+                    { key: "A", text: "漁民利用無法捕魚的淡季挑擔賣麵維持生計，展現了先民面對生活困境時的堅韌與彈性。" },
+                    { key: "B", text: "描寫臺南沿海居民非常喜歡挑著重擔在街上跑步，純粹是為了鍛鍊身體。" },
+                    { key: "C", text: "說明每到七八月份，漁民就會聚在一起舉辦大胃王比賽，看誰能吃下最多擔仔麵。" }
+                ],
+                answer: "A",
+                explain: "「小月」代表漁業淡季、生計受限的艱難時刻。先民挑擔賣麵是為了「補貼家用」度過困境，這個名稱記錄了早期臺灣常民在天候限制下，不向命運低頭、積極變通的生活智慧。"
+            },
+            {
+                id: 9,
+                question: "9. 根據習作中的《鳳梨酥》閱讀測驗：「今日的『金鑽鳳梨』果實大、多汁味甜；但臺灣早期的鳳梨個頭小又酸，絕非如今日適合鮮食。」這句話在寫作手法上，主要是透過什麼方式來強調今日鳳梨的優點？",
+                options: [
+                    { key: "A", text: "擬人化手法（讓早期的酸鳳梨開口向今天甜鳳梨抗議）。" },
+                    { key: "B", text: "對比法（將「早期酸鳳梨不宜鮮食」與「今日金鑽鳳梨多汁味甜」進行今昔對比）。" },
+                    { key: "C", text: "分解說明法（詳細說明如何用奶油與白糖粉揉捏成黃金酥皮）。" }
+                ],
+                answer: "B",
+                explain: "這句話將「早期鳳梨（小又酸、不宜鮮食）」與「現代金鑽鳳梨（大、肉軟、多汁甜、適合鮮食）」放在一起比較，利用明顯的「今昔特徵對比」，凸顯了現代農業改良技術與鳳梨特性的轉變。"
+            },
+            {
+                id: 10,
+                question: "10. 綜合《臺灣美食詩選》兩首課文與習作中的《擔仔麵》、《臭豆腐》等內容，我們發現臺灣平民小吃最迷人的核心價值是什麼？",
+                options: [
+                    { key: "A", text: "每一道美食的歷史由來與當地的氣候、天災或常民生活息息相關，蘊含著土地的歷史與溫暖人情。" },
+                    { key: "B", text: "美食必須完全依靠昂貴的添加物和複雜的科技，才能在國際美食天地裡颳起陣陣旋風。" },
+                    { key: "C", text: "只要食物熱量高、吃起來重鹹重甜，就是最具代表性的「臺灣之光」。" }
+                ],
+                answer: "A",
+                explain: "不論是水災後物資短缺發明的肉圓（救命恩情）、漁業淡季為維持生計挑擔賣的擔仔麵（補貼家用），或是基隆廟口歷經晨昏四季的鼎邊趖（歲月記憶），臺灣小吃背後都包覆著鮮活的在地人文歷史與濃厚的人情味，這才是最珍貴的文化美感。"
+            }
+        ];
+
+        // App Reactive State
+        let activeSection = "guide";
+        let studentName = "";
+        
+        // Puzzle 1 (遞進複句)
+        let p1Pool = [];
+        let p1Slots = [null, null, null, null];
+        
+        // Puzzle 2 (選擇複句)
+        let p2Pool = [];
+        let p2Slots = [null, null, null, null];
+
+        // Match A/B State
+        let matchAnswers = { A: "", B: "" };
+
+        // Meatball Factory State
+        let factoryPool = [];
+        let factorySlots = [null, null, null, null, null];
+        let compiling = false;
+
+        // Quiz System State
+        let quizAnswers = {};
+        let quizSubmitted = false;
+        let quizScore = 0;
+
+        // --- STREAMING_CHUNK: 核心輔助工具函數 ---
+        // 新增：下載當前完整 HTML 網頁函數
+        function downloadCurrentHTML() {
+            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "taiwan_food_poetry_platform.html";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast("💾 網頁 HTML 檔案下載成功！您可以將它儲存到隨身碟，隨時離線開啟上課！", "success");
+        }
+
+        // UI Core Toast Helper
+        function showToast(message, type = "info") {
+            const toast = document.getElementById("toast");
+            const icon = document.getElementById("toast-icon");
+            const msg = document.getElementById("toast-message");
+
+            msg.innerText = message;
+            
+            // Reconfigure theme colors
+            toast.className = "fixed top-4 right-4 z-50 flex items-center px-5 py-3 rounded-xl shadow-xl transition-all duration-300 transform translate-y-0 opacity-100 max-w-md ";
+            
+            if (type === "success") {
+                toast.classList.add("bg-emerald-50", "text-emerald-800", "border-l-4", "border-emerald-500");
+                icon.innerText = "✓";
+            } else if (type === "error") {
+                toast.classList.add("bg-rose-50", "text-rose-800", "border-l-4", "border-rose-500");
+                icon.innerText = "✕";
+            } else if (type === "warning") {
+                toast.classList.add("bg-amber-50", "text-amber-800", "border-l-4", "border-amber-500");
+                icon.innerText = "⚠";
+            } else {
+                toast.classList.add("bg-blue-50", "text-blue-800", "border-l-4", "border-blue-500");
+                icon.innerText = "ℹ";
+            }
+
+            setTimeout(() => {
+                toast.classList.remove("translate-y-0", "opacity-100");
+                toast.classList.add("translate-y-12", "opacity-0");
+            }, 3500);
+        }
+
+        // Section Scroll Manager
+        function scrollToSection(id) {
+            activeSection = id;
+            document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+            updateNavStyles();
+            updateProgressBar();
+        }
+
+        function updateNavStyles() {
+            document.querySelectorAll(".nav-btn").forEach(btn => {
+                btn.classList.remove("bg-amber-800", "text-white");
+                btn.classList.add("text-amber-900", "hover:bg-amber-50");
+            });
+            const activeBtn = document.getElementById(`nav-${activeSection}`);
+            if (activeBtn) {
+                activeBtn.classList.remove("text-amber-900", "hover:bg-amber-50");
+                activeBtn.classList.add("bg-amber-800", "text-white");
+            }
+        }
+
+        function updateProgressBar() {
+            const bar = document.getElementById("progress-bar");
+            const percentageMap = {
+                guide: "15%",
+                grammar: "35%",
+                factory: "60%",
+                generator: "75%",
+                quiz: "90%",
+                certificate: "100%"
+            };
+            if (bar) {
+                bar.style.width = percentageMap[activeSection] || "15%";
+            }
+        }
+
+        // Scrollspy Event
+        window.addEventListener("scroll", () => {
+            const sections = ["guide", "grammar", "factory", "generator", "quiz", "certificate"];
+            let currentSection = activeSection;
+            
+            sections.forEach(secId => {
+                const el = document.getElementById(secId);
+                if (el) {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top <= 120 && rect.bottom >= 120) {
+                        currentSection = secId;
+                    }
+                }
+            });
+
+            if (currentSection !== activeSection) {
+                activeSection = currentSection;
+                updateNavStyles();
+                updateProgressBar();
+            }
+        });
+
+        // --- STREAMING_CHUNK: 句型重組拼圖模組 ---
+        // Unit 2:重組拼圖初始化與渲染
+        function initPuzzles() {
+            // Puzzle 1 Pool Setup
+            p1Pool = [...TIMELINE_DATA_ITEMS].sort(() => Math.random() - 0.5);
+            p1Slots = [null, null, null, null];
+            document.getElementById("p1-result-badge").classList.add("hidden");
+
+            // Puzzle 2 Pool Setup
+            p2Pool = [...PUZZLE_2_ITEMS].sort(() => Math.random() - 0.5);
+            p2Slots = [null, null, null, null];
+            document.getElementById("p2-result-badge").classList.add("hidden");
+
+            renderP1();
+            renderP2();
+        }
+
+        function renderP1() {
+            const slotsContainer = document.getElementById("p1-slots");
+            slotsContainer.innerHTML = p1Slots.map((slot, idx) => {
+                if (slot) {
+                    return `
+                        <button onclick="handleP1TileClick('${slot.id}', ${idx})" class="bg-amber-800 hover:bg-amber-900 text-white text-xs px-3 py-1.5 rounded-lg flex items-center space-x-1 shadow-sm transition">
+                            <span>${slot.text}</span>
+                            <span class="text-[9px] bg-amber-950 px-1 rounded opacity-75">×</span>
+                        </button>
+                    `;
+                } else {
+                    return `<div class="border border-dashed border-amber-300 rounded-lg h-8 w-32 bg-[#FCFAF2]/50 flex items-center justify-center text-[10px] text-amber-800/40 italic font-mono">SLOT ${idx+1}</div>`;
+                }
+            }).join('');
+
+            const poolContainer = document.getElementById("p1-pool");
+            poolContainer.innerHTML = p1Pool.map(piece => `
+                <button onclick="handleP1TileClick('${piece.id}')" class="bg-white hover:bg-amber-50 text-amber-950 text-xs px-3 py-2 rounded-lg border border-amber-200 transition shadow-sm active:scale-95">
+                    ${piece.text}
+                </button>
+            `).join('');
+        }
+
+        function handleP1TileClick(id, slotIndex = null) {
+            document.getElementById("p1-result-badge").classList.add("hidden");
+            if (slotIndex !== null) {
+                const piece = p1Slots[slotIndex];
+                p1Slots[slotIndex] = null;
+                p1Pool.push(piece);
+            } else {
+                const emptyIdx = p1Slots.findIndex(s => s === null);
+                if (emptyIdx !== -1) {
+                    const piece = p1Pool.find(p => p.id === id);
+                    p1Slots[emptyIdx] = piece;
+                    p1Pool = p1Pool.filter(p => p.id !== id);
+                } else {
+                    showToast("拼圖位置已滿，請點選上方插槽中的詞牌退回！", "warning");
+                }
+            }
+            renderP1();
+        }
+
+        function checkP1() {
+            if (p1Slots.includes(null)) {
+                showToast("請先將 4 個詞牌拼圖全部送入插槽！", "warning");
+                return;
+            }
+            const order = p1Slots.map(s => s.id);
+            // 正確順序：1. 在人來人往的晨昏四季中，(p1-4) 2. 這碗熱騰騰的鼎邊趖(p1-1) 3. 不僅蘊藏著廟口的在地歷史，(p1-2) 4. 更記錄了數代人共同的鮮美記憶。(p1-3)
+            const isCorrect = order[0] === "p1-4" && order[1] === "p1-1" && order[2] === "p1-2" && order[3] === "p1-3";
+            
+            const badge = document.getElementById("p1-result-badge");
+            badge.classList.remove("hidden");
+            if (isCorrect) {
+                badge.innerText = "✓ 完全正確！";
+                badge.className = "text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700";
+                showToast("🎉 太完美了！你精準重組了鼎邊趖的遞進人文句！", "success");
+            } else {
+                badge.innerText = "✕ 語序不正確";
+                badge.className = "text-xs font-bold px-2.5 py-1 rounded-md bg-rose-50 text-rose-700";
+                showToast("❌ 時序或情感關聯似乎不太流暢，請重置後再挑戰！", "error");
+            }
+        }
+
+        function resetP1() {
+            p1Pool = [...TIMELINE_DATA_ITEMS].sort(() => Math.random() - 0.5);
+            p1Slots = [null, null, null, null];
+            document.getElementById("p1-result-badge").classList.add("hidden");
+            renderP1();
+        }
+
+        // Puzzle 2 Logic (選擇複句)
+        function renderP2() {
+            const slotsContainer = document.getElementById("p2-slots");
+            slotsContainer.innerHTML = p2Slots.map((slot, idx) => {
+                if (slot) {
+                    return `
+                        <button onclick="handleP2TileClick('${slot.id}', ${idx})" class="bg-amber-800 hover:bg-amber-900 text-white text-xs px-3 py-1.5 rounded-lg flex items-center space-x-1 shadow-sm transition">
+                            <span>${slot.text}</span>
+                            <span class="text-[9px] bg-amber-950 px-1 rounded opacity-75">×</span>
+                        </button>
+                    `;
+                } else {
+                    return `<div class="border border-dashed border-amber-300 rounded-lg h-8 w-32 bg-[#FCFAF2]/50 flex items-center justify-center text-[10px] text-amber-800/40 italic font-mono">SLOT ${idx+1}</div>`;
+                }
+            }).join('');
+
+            const poolContainer = document.getElementById("p2-pool");
+            poolContainer.innerHTML = p2Pool.map(piece => `
+                <button onclick="handleP2TileClick('${piece.id}')" class="bg-white hover:bg-amber-50 text-amber-950 text-xs px-3 py-2 rounded-lg border border-amber-200 transition shadow-sm active:scale-95">
+                    ${piece.text}
+                </button>
+            `).join('');
+        }
+
+        function handleP2TileClick(id, slotIndex = null) {
+            document.getElementById("p2-result-badge").classList.add("hidden");
+            if (slotIndex !== null) {
+                const piece = p2Slots[slotIndex];
+                p2Slots[slotIndex] = null;
+                p2Pool.push(piece);
+            } else {
+                const emptyIdx = p2Slots.findIndex(s => s === null);
+                if (emptyIdx !== -1) {
+                    const piece = p2Pool.find(p => p.id === id);
+                    p2Slots[emptyIdx] = piece;
+                    p2Pool = p2Pool.filter(p => p.id !== id);
+                } else {
+                    showToast("拼圖位置已滿，請點選上方插槽中的詞牌退回！", "warning");
+                }
+            }
+            renderP2();
+        }
+
+        function checkP2() {
+            if (p2Slots.includes(null)) {
+                showToast("請先將所有拼圖填入插槽！", "warning");
+                return;
+            }
+            const order = p2Slots.map(s => s.id);
+            // 正確順序：1. 當我們品嚐著晶瑩透亮的肉圓時，(p2-1) 2. 是單純滿足於舌尖上的美味，(p2-2) 3. 還是默默感念(p2-3) 4. 先人洪水過後互助的恩情？(p2-4)
+            const isCorrect = order[0] === "p2-1" && order[1] === "p2-2" && order[2] === "p2-3" && order[3] === "p2-4";
+            
+            const badge = document.getElementById("p2-result-badge");
+            badge.classList.remove("hidden");
+            if (isCorrect) {
+                badge.innerText = "✓ 完全正確！";
+                badge.className = "text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700";
+                showToast("🎉 太讚了！選擇複句拼圖也完全正確！", "success");
+            } else {
+                badge.innerText = "✕ 語序不正確";
+                badge.className = "text-xs font-bold px-2.5 py-1 rounded-md bg-rose-50 text-rose-700";
+                showToast("❌ 二擇一設問語意不夠對稱，請調回正確語序！", "error");
+            }
+        }
+
+        function resetP2() {
+            p2Pool = [...PUZZLE_2_ITEMS].sort(() => Math.random() - 0.5);
+            p2Slots = [null, null, null, null];
+            document.getElementById("p2-result-badge").classList.add("hidden");
+            renderP2();
+        }
+
+        // --- STREAMING_CHUNK: 寫作挑戰與說明手法連連看 ---
+        // Creative Challenge Submit
+        function submitCreativeChallenge() {
+            const textVal = document.getElementById("creative-text").value.trim();
+            const poemVal = document.getElementById("creative-poem").value.trim();
+            const feedback = document.getElementById("creative-feedback");
+
+            if (!textVal || !poemVal) {
+                showToast("請將介紹文字與改寫童詩欄位都填寫完畢喔！", "warning");
+                return;
+            }
+
+            feedback.classList.remove("hidden");
+            feedback.innerHTML = `
+                <p class="font-bold">🎉 教學平台文學檢驗核可：</p>
+                <p class="mt-1 font-light leading-relaxed">
+                    太有創意了！你成功將<strong>「在地歷史人文」</strong>與童詩改寫架構結合。
+                    系統已自動將您的「紀實文字 + 改寫美食詩篇」複製到您的剪貼簿！您可以隨時貼在線上學習單、班級討論區，或交給國語老師評分！
+                </p>
+            `;
+
+            const fullTextToCopy = `【我的臺灣美食人文讀寫藍圖】\n\n1. 歷史介紹文字：\n${textVal}\n\n2. 童詩改寫版：\n${poemVal}`;
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = fullTextToCopy;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            try {
+                document.execCommand("copy");
+                showToast("📋 讀寫挑戰內容已自動複製！", "success");
+            } catch (err) {
+                showToast("複製失敗，請手動選取文字複製！", "error");
+            }
+            document.body.removeChild(tempTextArea);
+        }
+
+        // Unit 3: 連連看選擇
+        function selectMatch(q, style) {
+            matchAnswers[q] = style;
+            
+            document.querySelectorAll(`#match-${q.toLowerCase()}-example, #match-${q.toLowerCase()}-decompose`).forEach(btn => {
+                btn.className = "match-btn px-3 py-1.5 rounded-lg text-xs font-semibold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-100";
+            });
+
+            const selectedBtn = document.getElementById(`match-${q.toLowerCase()}-${style}`);
+            if (selectedBtn) {
+                selectedBtn.className = "match-btn px-3 py-1.5 rounded-lg text-xs font-semibold border transition bg-amber-800 text-white border-amber-800";
+            }
+        }
+
+        function checkMatch() {
+            const badge = document.getElementById("match-result-badge");
+            badge.classList.remove("hidden");
+
+            if (!matchAnswers.A || !matchAnswers.B) {
+                showToast("請將 A、B 兩個段落的說明手法都選好！", "warning");
+                badge.innerText = "⚠️ 請完成兩題的手法判定";
+                badge.className = "text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200";
+                return;
+            }
+
+            // Paragraph A is exemplification (例如: 韓國鍋、日本味噌) -> example
+            // Paragraph B is decomposition (首先、接著、最後) -> decompose
+            if (matchAnswers.A === "example" && matchAnswers.B === "decompose") {
+                badge.innerText = "✓ 完全正確！你完美掌握了「舉例說明法」與「分解說明法」！";
+                badge.className = "text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200";
+                showToast("🎉 連連看完全答對！不愧是說明手法大師！", "success");
+            } else {
+                badge.innerText = "✕ 答案有誤。提示：段落 B 包含了明確的「首先、接著、再、最後」等時間步驟喔！";
+                badge.className = "text-xs font-bold px-3 py-1.5 rounded-lg bg-rose-50 text-rose-800 border border-rose-200";
+                showToast("❌ 說明方法配對錯誤，請重新分析！", "error");
+            }
+        }
+
+        // --- STREAMING_CHUNK: 北斗肉圓智慧工廠模組 ---
+        // Unit 4: 演算法時序智慧工廠
+        function initFactory() {
+            factoryPool = [...INITIAL_FACTORY_BLOCKS].sort(() => Math.random() - 0.5);
+            factorySlots = [null, null, null, null, null];
+            compiling = false;
+
+            // Reset Simulator elements
+            document.getElementById("compiler-status-text").className = "text-slate-500";
+            document.getElementById("compiler-status-text").innerText = "待機中 (STANDBY)";
+            document.getElementById("sim-step-1").style.opacity = "0.3";
+            document.getElementById("sim-step-2").style.opacity = "0.3";
+            document.getElementById("sim-step-3").style.opacity = "0.3";
+            document.getElementById("sim-step-4").style.opacity = "0.3";
+            document.getElementById("boiler-steam").classList.add("hidden");
+            document.getElementById("oil-bubbles").classList.add("hidden");
+            document.getElementById("success-particles").classList.add("hidden");
+            document.getElementById("success-particles").innerHTML = "";
+
+            document.getElementById("compiler-logs").innerHTML = `
+                <div class="text-slate-400">系統就緒。請將 5 個北斗肉圓工藝時序步驟放上組裝線，點擊「啟動組裝線」進行認知編譯檢驗。</div>
+            `;
+            renderFactory();
+        }
+
+        function renderFactory() {
+            const slotsContainer = document.getElementById("factory-slots");
+            slotsContainer.innerHTML = factorySlots.map((slot, idx) => {
+                if (slot) {
+                    return `
+                        <div class="flex items-center">
+                            <span class="text-[11px] font-mono text-cyan-400 w-16">STEP_0${idx+1}</span>
+                            <button onclick="handleFactoryTileClick('${slot.id}', ${idx})" ${compiling ? 'disabled' : ''} class="flex-1 bg-cyan-950 hover:bg-cyan-900 text-cyan-100 border border-cyan-800 rounded-lg px-3.5 py-2.5 text-xs text-left transition transform active:scale-95 flex justify-between items-center">
+                                <span class="font-semibold">${slot.text}</span>
+                                <span class="text-[9px] bg-cyan-900 text-cyan-300 px-1.5 py-0.5 rounded tracking-wide uppercase">收回</span>
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="flex items-center">
+                            <span class="text-[11px] font-mono text-cyan-400 w-16">STEP_0${idx+1}</span>
+                            <div class="flex-1 border border-dashed border-slate-800 rounded-lg h-10 bg-slate-900/30 flex items-center px-4">
+                                <span class="text-[11px] text-slate-600 italic">空插槽 - 點按下方原料填入</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+
+            const poolContainer = document.getElementById("factory-pool");
+            poolContainer.innerHTML = factoryPool.map(block => `
+                <button onclick="handleFactoryTileClick('${block.id}')" ${compiling ? 'disabled' : ''} class="bg-slate-800 hover:bg-slate-700 hover:text-white text-slate-300 border border-slate-700 font-medium px-3.5 py-2 rounded-lg text-xs transition duration-200 shadow-sm active:scale-95">
+                    ${block.text}
+                </button>
+            `).join('');
+
+            if (factoryPool.length === 0) {
+                poolContainer.innerHTML = `<span class="text-xs text-slate-600 italic">所有步驟原料積木已放上組裝線...</span>`;
+            }
+        }
+
+        function handleFactoryTileClick(id, slotIndex = null) {
+            if (compiling) return;
+            document.getElementById("compiler-status-text").className = "text-slate-500";
+            document.getElementById("compiler-status-text").innerText = "待機中 (STANDBY)";
+
+            if (slotIndex !== null) {
+                const block = factorySlots[slotIndex];
+                factorySlots[slotIndex] = null;
+                factoryPool.push(block);
+            } else {
+                const emptyIdx = factorySlots.findIndex(s => s === null);
+                if (emptyIdx !== -1) {
+                    const block = factoryPool.find(p => p.id === id);
+                    factorySlots[emptyIdx] = block;
+                    factoryPool = factoryPool.filter(p => p.id !== id);
+                } else {
+                    showToast("時序組裝線已滿！", "warning");
+                }
+            }
+            renderFactory();
+        }
+
+        function runDiagnostics() {
+            if (factorySlots.includes(null)) {
+                showToast("請先將 5 個肉圓步驟積木全部排上組裝線！", "warning");
+                return;
+            }
+
+            compiling = true;
+            renderFactory();
+
+            const runBtn = document.getElementById("run-btn");
+            runBtn.disabled = true;
+            runBtn.innerHTML = `<span>⚙️ 歷史時序編譯判定中...</span>`;
+
+            const statusText = document.getElementById("compiler-status-text");
+            statusText.className = "text-amber-400 animate-pulse font-bold";
+            statusText.innerText = "時序診斷中...";
+
+            const logsBox = document.getElementById("compiler-logs");
+            logsBox.innerHTML = `
+                <div class="text-slate-400">[SYSTEM] 載入北斗救災肉圓工藝序列相依模組 V3.1...</div>
+                <div class="text-slate-400">[SYSTEM] 開始讀取步驟前後因果拓撲關係...</div>
+            `;
+
+            setTimeout(() => {
+                const steps = factorySlots.map(s => s.step);
+                let isCorrect = true;
+                let errorIndex = -1;
+                let advice = "";
+
+                //時序邏輯判定：
+                // 1.地瓜晒乾磨粉 (1) 必須在 加水揉成團狀 (2) 之前。
+                // 2.包裹豬肉竹筍 (3) 必須在 高溫清蒸定型 (4) 之前。
+                // 3.高溫清蒸定型 (4) 必須在 溫潤油炸盛盤 (5) 之前。
+                // 如果沒有依 1, 2, 3, 4, 5 排列，即時提出烹煮物理診斷：
+                for (let i = 0; i < steps.length; i++) {
+                    const currentStep = steps[i];
+                    
+                    if (currentStep === 3) { //包裹豬肉竹筍
+                        const idx1 = steps.indexOf(1);
+                        const idx2 = steps.indexOf(2);
+                        if (idx1 > i || idx2 > i) {
+                            isCorrect = false;
+                            errorIndex = i;
+                            advice = "【歷史拓撲衝突】在未將地瓜磨乾粉（1）與加水揉成糰（2）之前，無法將食材包裹進去。乾粉缺乏凝聚力，肉餡與地瓜乾粉直接混合會四散，無法定型！";
+                            break;
+                        }
+                    }
+                    if (currentStep === 4) { //高溫清蒸定型
+                        const idx3 = steps.indexOf(3);
+                        if (idx3 > i) {
+                            isCorrect = false;
+                            errorIndex = i;
+                            advice = "【物理凝固異常】肉圓外皮必須先包裹鮮肉筍丁（3），才能送入清蒸定型（4）。如果直接蒸生粉糰，蒸熟後將會變得極度黏稠、宛如巨大的糨糊，事後將完全無法包裹內餡！";
+                            break;
+                        }
+                    }
+                    if (currentStep === 5) { //溫潤油炸盛盤
+                        const idx4 = steps.indexOf(4);
+                        if (idx4 > i) {
+                            isCorrect = false;
+                            errorIndex = i;
+                            advice = "【烹飪防爆衝突】生肉圓（步驟3包裹完畢）必須先經過高溫清蒸定型（4）使其糊化凝固！如果直接將溼軟的生粉糰放入高溫油炸（5），外皮的澱粉與生內餡在油鍋中會瞬間爆裂開來，整鍋肉圓會徹底碎裂融化，並引起油爆危險！";
+                            break;
+                        }
+                    }
+                }
+
+                if (isCorrect && JSON.stringify(steps) !== JSON.stringify([1, 2, 3, 4, 5])) {
+                    isCorrect = false;
+                    advice = "【工藝演算法未最佳化】雖然避開了嚴重的油爆或散落，但細部的時序順序顛倒。最完美的北斗肉圓演算法應為：地瓜晒乾磨粉 ➔ 加水揉成團狀 ➔ 包裹豬肉竹筍 ➔ 高溫清蒸定型 ➔ 溫潤油炸盛盤。";
+                }
+
+                if (isCorrect) {
+                    statusText.className = "text-emerald-400 font-bold";
+                    statusText.innerText = "時序正確 ✓";
+
+                    logsBox.innerHTML += `
+                        <div class="text-emerald-400 font-bold">[✓] 歷史工藝相依性檢驗：100% 通過！</div>
+                        <div class="text-emerald-400 font-bold">[✓] 外皮Q彈性分析：完全契合方群童詩中「一顆顆大大小小，一個個晶瑩透亮」的文學美感！</div>
+                        <div class="text-cyan-400 font-bold">[SIMULATOR] 成功產出完美彰化肉圓！啟動美味物理模擬...</div>
+                    `;
+                    simulateSuccess();
+                    showToast("🎉 肉圓工藝時序完全正確！大腦編譯暢通！", "success");
+                } else {
+                    statusText.className = "text-rose-500 font-bold";
+                    statusText.innerText = "時序邏輯崩溃 ✕";
+
+                    logsBox.innerHTML += `
+                        <div class="text-rose-500 font-bold">[❌ ERROR] 發現工藝衝突 (步驟 SLOT_0${errorIndex + 1})</div>
+                        <div class="text-amber-300 font-semibold leading-relaxed">[大師引導分析] ${advice}</div>
+                        <div class="text-slate-400">[SYSTEM] 系統進入安全中止模式。請調整積木至正確時序後重試。</div>
+                    `;
+                    showToast("❌ 時序邏輯錯誤，請閱讀診斷引誌！", "error");
+                }
+
+                compiling = false;
+                runBtn.disabled = false;
+                runBtn.innerHTML = `<span>啟動時序組裝線 (COMPILE & RUN)</span>`;
+                logsBox.scrollTop = logsBox.scrollHeight;
+                renderFactory();
+            }, 1800);
+        }
+
+        function simulateSuccess() {
+            setTimeout(() => { document.getElementById("sim-step-1").style.opacity = "1"; }, 300);
+            setTimeout(() => { document.getElementById("sim-step-2").style.opacity = "1"; }, 750);
+            setTimeout(() => { 
+                document.getElementById("sim-step-3").style.opacity = "1"; 
+                document.getElementById("boiler-steam").classList.remove("hidden");
+            }, 1200);
+            setTimeout(() => { 
+                document.getElementById("sim-step-4").style.opacity = "1"; 
+                document.getElementById("oil-bubbles").classList.remove("hidden");
+            }, 1650);
+
+            // Bouncing success elements
+            setTimeout(() => {
+                const container = document.getElementById("success-particles");
+                container.classList.remove("hidden");
+                let htmlStr = "";
+                for (let i = 0; i < 40; i++) {
+                    const delay = (i * 0.08).toFixed(1);
+                    htmlStr += `
+                        <div class="w-3.5 h-3.5 rounded-full bg-amber-800 shadow-md animate-bounce" style="animation-delay: ${delay}s; animation-duration: 0.8s;"></div>
+                    `;
+                }
+                container.innerHTML = htmlStr;
+            }, 1900);
+        }
+
+        // --- STREAMING_CHUNK: 寫作結構產生器與範本載入 ---
+        // Unit 5: 台灣小吃藍圖寫作
+        function loadTemplate(key) {
+            const t = FOOD_TEMPLATES[key];
+            if (t) {
+                document.getElementById("food-name").value = t.name;
+                document.getElementById("food-step-1").value = t.step1;
+                document.getElementById("food-step-2").value = t.step2;
+                document.getElementById("food-main").value = t.main;
+                document.getElementById("food-partner").value = t.partner;
+                document.getElementById("food-reason").value = t.reason;
+                
+                showToast(`已成功載入經典人文小吃「${t.name}」寫作結構！`, "info");
+                updateBlueprint();
+            }
+        }
+
+        function clearTemplate() {
+            document.getElementById("food-name").value = "";
+            document.getElementById("food-step-1").value = "";
+            document.getElementById("food-step-2").value = "";
+            document.getElementById("food-main").value = "";
+            document.getElementById("food-partner").value = "";
+            document.getElementById("food-reason").value = "";
+            
+            showToast("結構產生器已清空，請自由創作！", "info");
+            updateBlueprint();
+        }
+
+        function updateBlueprint() {
+            const name = document.getElementById("food-name").value.trim() || "未命名台灣小吃";
+            const step1 = document.getElementById("food-step-1").value.trim() || "（尚未輸入第一步驟）";
+            const step2 = document.getElementById("food-step-2").value.trim() || "（尚未輸入第二步驟）";
+            const main = document.getElementById("food-main").value.trim() || "（美味主角）";
+            const partner = document.getElementById("food-partner").value.trim() || "（靈魂配角）";
+            const reason = document.getElementById("food-reason").value.trim() || "（搭配人文與科學原因）";
+
+            document.getElementById("bp-preview-title").innerText = name;
+            
+            const essayText = `【${name}】是臺灣極富情感與人文歷史的代表美食。它的製作過程精確遵循著時序演算法：首先，${step1}；緊接著，${step2}。除了嚴謹的時序步驟，這道平民小吃最令人動容的，是食材搭配中飽含的人文關懷。當主角「${main}」與靈魂配角「${partner}」巧妙交織時，之所以能達到登峰造極的美味，是因為${reason}。這種兼具「步驟邏輯」與「人文搭配美感」的寫作結構，正是讀懂臺灣美食詩歌與常民生命力的最佳工程藍圖。`;
+            
+            document.getElementById("bp-preview-text").innerText = essayText;
+        }
+
+        function copyEssay() {
+            const text = document.getElementById("bp-preview-text").innerText;
+            if (!text) return;
+            
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = text;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            try {
+                document.execCommand("copy");
+                showToast("📋 說明文藍圖已複製到剪貼簿！可直接交作業囉！", "success");
+            } catch (err) {
+                showToast("複製失敗，請手動圈選文字複製！", "error");
+            }
+            document.body.removeChild(tempTextArea);
+        }
+
+        // --- STREAMING_CHUNK: 綜合評量與計分系統 ---
+        // Unit 6: 綜合評量挑戰賽
+        function renderQuiz() {
+            const container = document.getElementById("quiz-questions-container");
+            container.innerHTML = QUIZ_QUESTIONS.map((q, idx) => {
+                return `
+                    <div class="p-5 bg-[#FCFAF2]/80 rounded-2xl border border-amber-100/40 relative">
+                        <div class="absolute top-4 left-4 w-6 h-6 bg-amber-800 text-[#FCFAF2] rounded-full flex items-center justify-center font-bold text-xs font-mono">
+                            ${idx + 1}
+                        </div>
+                        <div class="pl-8">
+                            <h4 class="font-bold text-amber-950 text-sm md:text-base mb-4 leading-relaxed">${q.question}</h4>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                ${q.options.map(opt => {
+                                    return `
+                                        <button 
+                                            id="opt-btn-${q.id}-${opt.key}" 
+                                            onclick="selectQuizOption(${q.id}, '${opt.key}')"
+                                            class="quiz-opt-btn flex items-start text-left p-3 rounded-xl border text-xs leading-relaxed transition bg-white border-slate-200 text-slate-700 hover:bg-amber-50/50"
+                                        >
+                                            <span class="font-mono font-bold mr-2 uppercase">(${opt.key})</span>
+                                            <span>${opt.text}</span>
+                                        </button>
+                                    `;
+                                }).join('')}
+                            </div>
+
+                            <!-- 解惑詳解 -->
+                            <div id="quiz-explain-${q.id}" class="mt-4 p-4 bg-amber-50/60 rounded-xl border border-amber-100 text-xs text-slate-600 leading-relaxed hidden shadow-inner">
+                                <strong class="text-amber-800 block mb-1">🏺 【大師深度解惑分析】</strong>
+                                ${q.explain}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectQuizOption(qId, key) {
+            if (quizSubmitted) return;
+            quizAnswers[qId] = key;
+            
+            document.querySelectorAll(`[id^="opt-btn-${qId}-"]`).forEach(btn => {
+                btn.className = "quiz-opt-btn flex items-start text-left p-3 rounded-xl border text-xs leading-relaxed transition bg-white border-slate-200 text-slate-700 hover:bg-amber-50/50";
+            });
+
+            const selectedBtn = document.getElementById(`opt-btn-${qId}-${key}`);
+            if (selectedBtn) {
+                selectedBtn.className = "quiz-opt-btn flex items-start text-left p-3 rounded-xl border text-xs leading-relaxed transition bg-amber-850 text-white border-amber-800 font-semibold ring-2 ring-amber-500/20";
+            }
+        }
+
+        function submitQuiz() {
+            if (Object.keys(quizAnswers).length < QUIZ_QUESTIONS.length) {
+                showToast("您尚未完成全部 10 題考核評量！", "warning");
+                return;
+            }
+
+            quizSubmitted = true;
+            let correctCount = 0;
+            
+            QUIZ_QUESTIONS.forEach(q => {
+                const chosen = quizAnswers[q.id];
+                const isCorrect = chosen === q.answer;
+                if (isCorrect) {
+                    correctCount++;
+                }
+
+                document.getElementById(`quiz-explain-${q.id}`).classList.remove("hidden");
+
+                q.options.forEach(opt => {
+                    const btn = document.getElementById(`opt-btn-${q.id}-${opt.key}`);
+                    if (btn) {
+                        btn.disabled = true;
+                        if (opt.key === q.answer) {
+                            btn.className = "quiz-opt-btn flex items-start text-left p-3 rounded-xl border text-xs leading-relaxed transition bg-emerald-50 text-emerald-800 border-emerald-500 font-bold ring-2 ring-emerald-500/20";
+                        } else if (opt.key === chosen) {
+                            btn.className = "quiz-opt-btn flex items-start text-left p-3 rounded-xl border text-xs leading-relaxed transition bg-rose-50 text-rose-800 border-rose-300 font-bold";
+                        } else {
+                            btn.className = "quiz-opt-btn flex items-start text-left p-3 rounded-xl border text-xs leading-relaxed transition bg-white text-slate-400 border-slate-100 opacity-60";
+                        }
+                    }
+                });
+            });
+
+            quizScore = correctCount * 10;
+            
+            document.getElementById("score-badge").innerText = `${quizScore}/100`;
+            document.getElementById("trophy-badge").innerText = "🏆";
+            document.getElementById("quiz-status").innerText = "評量已完成";
+            document.getElementById("quiz-score-display").innerText = `${quizScore} 分`;
+
+            document.getElementById("quiz-submit-btn").classList.add("hidden");
+            document.getElementById("quiz-reset-btn").classList.remove("hidden");
+
+            if (quizScore >= 80) {
+                document.getElementById("quiz-congrats").classList.remove("hidden");
+                document.getElementById("download-cert-btn").disabled = false;
+                document.getElementById("certificate-warning").innerText = `🎉 審查通過！您以 ${quizScore} 分的高分完全解鎖大師證書！請在下方輸入姓名蓋印發證！`;
+                showToast(`🎉 評量挑戰成功！得分：${quizScore} 分！證書發放核可！`, "success");
+            } else {
+                document.getElementById("certificate-warning").innerText = `（您目前得分為 ${quizScore} 分，未達 80 分大師發證標準。別氣餒！可以點擊「重新挑戰」獲取認證證書！）`;
+                showToast(`評量已送出，得分：${quizScore} 分。需達 80 分才能領取榮譽大師證書！`, "warning");
+            }
+
+            drawCertificate();
+        }
+
+        function resetQuiz() {
+            quizAnswers = {};
+            quizSubmitted = false;
+            quizScore = 0;
+
+            document.getElementById("score-badge").innerText = "未提交";
+            document.getElementById("trophy-badge").innerText = "★";
+            document.getElementById("quiz-status").innerText = "挑戰中";
+            document.getElementById("quiz-score-display").innerText = "?? 分";
+
+            document.getElementById("quiz-submit-btn").classList.remove("hidden");
+            document.getElementById("quiz-reset-btn").classList.add("hidden");
+            document.getElementById("quiz-congrats").classList.add("hidden");
+            document.getElementById("download-cert-btn").disabled = true;
+            document.getElementById("certificate-warning").innerText = `（您目前尚未通過評量考核，預設為預覽模式。）`;
+
+            renderQuiz();
+            drawCertificate();
+            showToast("評量題目重置成功！祝您獲得大師認證！", "info");
+        }
+
+        // --- STREAMING_CHUNK: Canvas 榮譽證書繪製 ---
+        // Unit 7: HTML5 Canvas Certificate Engine
+        function onStudentNameChange() {
+            studentName = document.getElementById("student-name").value;
+            drawCertificate();
+        }
+
+        function drawCertificate() {
+            const canvas = document.getElementById("cert-canvas");
+            if (!canvas) return;
+            const ctx = canvas.getContext("2d");
+            if (!ctx) return;
+
+            // HD Canvas Resolution
+            canvas.width = 800;
+            canvas.height = 560;
+
+            // 1. Warm Cream background
+            ctx.fillStyle = "#FCFAF2";
+            ctx.fillRect(0, 0, 800, 560);
+
+            // 2. Luxury Retro Double Borders
+            ctx.strokeStyle = "#78350F"; // Deep warm amber
+            ctx.lineWidth = 12;
+            ctx.strokeRect(20, 20, 760, 520);
+
+            ctx.strokeStyle = "#D97706"; // Golden inner line
+            ctx.lineWidth = 2;
+            ctx.strokeRect(32, 30, 736, 500);
+
+            // 3. Classical Corner Decorative Circles
+            ctx.fillStyle = "#D97706";
+            const corners = [[36, 34], [764, 34], [36, 526], [764, 526]];
+            corners.forEach(([cx, cy]) => {
+                ctx.beginPath();
+                ctx.arc(cx, cy, 9, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // 4. Header Title
+            ctx.textAlign = "center";
+            ctx.fillStyle = "#451A03"; // Rich brown
+            ctx.font = "bold 34px 'Noto Serif TC', 'Microsoft JhengHei', sans-serif";
+            ctx.fillText("臺灣美食文學大師證書", 400, 95);
+
+            ctx.font = "italic bold 14px sans-serif";
+            ctx.fillStyle = "#B45309";
+            ctx.fillText("MASTER CERTIFICATE OF TAIWANESEsnack LITERATURE", 400, 130);
+
+            // 5. Divider Line with central circle representing a Steaming Pot
+            ctx.beginPath();
+            ctx.moveTo(250, 150);
+            ctx.lineTo(550, 150);
+            ctx.strokeStyle = "#F59E0B";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.fillStyle = "#78350F";
+            ctx.beginPath();
+            ctx.arc(400, 150, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 6. Certificate Body Texts
+            ctx.fillStyle = "#334155";
+            ctx.font = "18px 'Noto Sans TC', sans-serif";
+            ctx.fillText("茲證明優秀學員", 400, 205);
+
+            // Dynamic Student Name
+            ctx.fillStyle = "#0F172A";
+            ctx.font = "bold 28px 'Noto Sans TC', sans-serif";
+            const nameToDraw = studentName.trim() || "【 優秀學習大師 】";
+            ctx.fillText(nameToDraw, 400, 255);
+
+            // Name underline
+            ctx.beginPath();
+            ctx.moveTo(240, 268);
+            ctx.lineTo(560, 268);
+            ctx.strokeStyle = "#94A3B8";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Achievement Descriptions
+            ctx.fillStyle = "#475569";
+            ctx.font = "15px 'Noto Sans TC', sans-serif";
+            
+            const earnedScore = quizSubmitted ? quizScore : 100;
+            const today = new Date();
+            const yearToShow = today.getFullYear();
+            
+            const line1 = "參與國語六上第四課《臺灣美食詩選》跨領域寫作與時序工藝挑戰，";
+            const line2 = `深入研習美食詩篇歷史底蘊、語文句型，並以 ${earnedScore} 分之優異成績通過評量！`;
+            const line3 = "特此證明已完全領悟說明文之「分解說明法」與「舉例說明法」核心思維，";
+            const line4 = "具備卓越的臺灣常民人文關懷與跨領域時序邏輯拓撲素養。";
+
+            ctx.fillText(line1, 400, 310);
+            ctx.fillText(line2, 400, 340);
+            ctx.fillText(line3, 400, 370);
+            ctx.fillText(line4, 400, 400);
+
+            // Footer division line
+            ctx.beginPath();
+            ctx.moveTo(100, 435);
+            ctx.lineTo(700, 435);
+            ctx.strokeStyle = "#E2E8F0";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Institution Details
+            ctx.textAlign = "left";
+            ctx.font = "13px 'Noto Sans TC', sans-serif";
+            ctx.fillStyle = "#64748B";
+            ctx.fillText("認證機構：寶島美食文學推廣學堂", 100, 465);
+            ctx.fillText("課程學科：國語六上第四課《臺灣美食詩選》", 100, 490);
+
+            ctx.textAlign = "right";
+            const dateStr = `${yearToShow}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+            ctx.fillText(`發證日期：${dateStr}`, 700, 465);
+            
+            ctx.fillStyle = "#059669";
+            ctx.fillText("時序與人文雙重核可 ✓", 700, 490);
+
+            // 7. Circular red stamp for Authority Seal
+            ctx.textAlign = "center";
+            ctx.fillStyle = "rgba(239, 68, 68, 0.08)";
+            ctx.strokeStyle = "rgba(239, 68, 68, 0.75)";
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.arc(400, 478, 38, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.fill();
+
+            ctx.font = "bold 11px 'Noto Serif TC', sans-serif";
+            ctx.fillStyle = "rgba(220, 38, 38, 0.85)";
+            ctx.fillText("推廣學堂", 400, 473);
+            ctx.fillText("認證大印", 400, 493);
+        }
+
+        function downloadCertificate() {
+            const canvas = document.getElementById("cert-canvas");
+            if (!canvas) return;
+            const url = canvas.toDataURL("image/png");
+            const link = document.createElement("a");
+            const name = studentName.trim() || "大師";
+            link.download = `${name}_臺灣美食文學大師榮譽證書.png`;
+            link.href = url;
+            link.click();
+            showToast("💖 證書 PNG 下載成功！恭喜您成為寶島美食大師！", "success");
+        }
+
+        function copyShare() {
+            const text = `🎉 太開心了！我剛剛完成了《臺灣美食詩選教學互動網》中所有的語文複句特訓、北斗肉圓時序演算法，並在綜合評量中獲得了 ${quizScore || 100} 分的好成績，成功榮獲「臺灣美食文學大師」榮譽證書！大家也一起來探索臺灣平民小吃背後感人的人文與歷史吧！🍲`;
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = text;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            try {
+                document.execCommand("copy");
+                showToast("📋 分享賀詞已成功複製到剪貼簿！快去和同學分享喜悅吧！", "success");
+            } catch (err) {
+                showToast("複製失敗，請手動複製文字！", "error");
+            }
+            document.body.removeChild(tempTextArea);
+        }
+
+        function printCertificate() {
+            window.print();
+        }
+
+        // --- STREAMING_CHUNK: 生命週期初始化模組 ---
+        // On Load Init
+        window.onload = function() {
+            initPuzzles();
+            initFactory();
+            updateBlueprint();
+            renderQuiz();
+            drawCertificate();
+        }
+    </script>
+</body>
+</html>
